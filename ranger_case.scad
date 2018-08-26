@@ -24,6 +24,22 @@ module assembly() {
   }
 }
 
+module label() {
+  translate([0, -y1/2, -w+t]) {
+    rotate([180,0,0]) {
+      linear_extrude(t) {
+        text(str(MAT), size=th, font=font, valign="top");
+        translate([0, -th*2, 0]) {
+          text(str(SRC," ",VER," "), size=th, font=font, valign="top");
+        }
+        translate([0, -th*4, 0]) {
+          text(str(FILE), size=th, font=font, valign="top");
+        }
+      }
+    }
+  }
+}
+
 module box_top(
   x=x,
   y1=y1,
@@ -48,6 +64,7 @@ module box_top(
       translate([-5, 0, w]) {
         rj45();
       }
+      label();
     }
   }
 }
@@ -75,6 +92,7 @@ module box_bottom(
     translate([-w*2, -y2, 0]) {
       cube(size=[x+w*3-7, y2*2, z2+w*2]);
     }
+    label();
   }
 }
 
