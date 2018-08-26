@@ -1,0 +1,12 @@
+[submodule "lib/MCAD"]
+	path = lib/MCAD
+	url = https://github.com/openscad/MCAD.git
+[submodule "lib/FreeCAD-library"]
+	path = lib/FreeCAD-library
+	url = https://github.com/FreeCAD/FreeCAD-library.git
+[submodule "lib/Write.scad"]
+	path = lib/Write.scad
+	url = ../Write.scad
+[submodule "lib/openscad-slicer-makefile"]
+	path = lib/openscad-slicer-makefile
+	url = ../openscad-slicer-makefile.git
