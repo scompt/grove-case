@@ -48,7 +48,8 @@ module grove_module(
           x=1,
           y=1,/* no effect yet */
           flat=0,
-          pos=1
+          pos=1,
+          block=1
 ) {
   translate([0, 0, 3]) {
     for (i=[0:x-1]) {
@@ -66,8 +67,10 @@ module grove_module(
         color("white",0.6) grove_con();
       }
     }
-    translate([10*x/2, 10*y/2-5, 2]) {
-      color("green",0.3) cube(size=[10*x, 10*y, 10], center=true);
+    if (block) {
+      translate([10*x/2, 10*y/2-5, 2]) {
+        color("green",0.3) cube(size=[10*x, 10*y, 10], center=true);
+      }
     }
   }
 }
@@ -155,6 +158,23 @@ module relais() {
     }
   }
 }
+/* grove_rj45(); */
+module grove_rj45() {
+  %rj45();
+  %grove_module(x=2,pos=1,block=0);
+  difference() {
+    grove_module_holder(x=2);
+    translate([0, 0, 0]) {
+      cube(size=[30, 10, 10], center=true);
+    }
+  }
+}
+/* rj45(); */
+module rj45() {
+  translate([-10, -10+2.5, 4.5]) {
+    cube(size=[21, 15, 13.5]);
+  }
+}
 
 module display_display(z=2) {
   translate([11/2+10, 4/2, 2/2]) {
@@ -228,5 +248,59 @@ module joystick_cutout(w=w) {
   cylinder(d=12.5, h=50, center=true);
   translate([0, 0, w/2]) {
     cylinder(d=20, h=w);
+  }
+}
+/* grove_ranger2(); */
+module grove_ranger2() {
+  ranger_holes=[
+  [-7.5, -10, 0],
+  [-7.5, 10, 0],
+  [22.5, 0, 0]
+  ];
+  translate([0, 0, 3]) {
+    difference() {
+      translate([0, 0, 0.75]) {
+        color("green",0.3) cube(size=[50, 25, 1.5], center=true);
+      }
+      for (i=ranger_holes) {
+        translate(i) {
+          cylinder(r=1.5, h=10, center=true, $fn=12);
+        }
+      }
+    }
+
+    translate([3.5+7.5, 0, 0]) {
+      color("silver",0.6) cylinder(r=8, h=9, center=false);
+    }
+    translate([-3.5-7.5, 0, 0]) {
+      color("silver",0.6) cylinder(r=8, h=9, center=false);
+    }
+
+    translate([-5,9,3]) {
+      rotate([0, 90, 0]) {
+        color("white",0.6) grove_con();
+      }
+    }
+  }
+}
+
+module ranger_holder(
+  h=3
+) {
+  ranger_holes=[
+  [-7.5, -10, 0],
+  [-7.5, 10, 0],
+  [22.5, 0, 0]
+  ];
+  %grove_ranger2();
+  for (i=ranger_holes) {
+    translate(i) {
+      translate([0, 0, 4.5]) {
+        difference() {
+          cylinder(d=5, h=h, $fn=12);
+          cylinder(d=2.6, h=h, $fn=12);
+        }
+      }
+    }
   }
 }
