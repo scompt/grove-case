@@ -1,11 +1,11 @@
 include <lib/grove.scad>
 include <conf/config.scad>
 
-x=53;
+x=55;
 y1=25;
-y2=50;
+y2=53;
 z1=20;
-z2=30;
+z2=32;
 
 /* assembly(); */
 box_bottom();
@@ -124,7 +124,7 @@ module box_finish (
 }
 
 module ranger(holder=0) {
-  translate([45, 0, 12.5]) {
+  translate([x-8, 0, 12.5]) {
     rotate([0, 0, 90]) {
       rotate([90, 0, 0]) {
         if (holder) {
