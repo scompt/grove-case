@@ -1,6 +1,7 @@
 use <lib/MCAD/regular_shapes.scad>
 
 OLED_JOY="oled_joy";
+OLED_JOY_RJ45="oled_joy_rj45";
 TOUCH_DISPLAY="touch_display";
 /* !grove_module_holder(x=2,y=1,flat=0,h=3); */
 module grove_module_holder(x=1,y=1,flat=0,h=3) {

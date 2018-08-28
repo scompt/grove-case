@@ -24,8 +24,13 @@ a=0;
 board=MEGA;
 inset=TOUCH_DISPLAY;
 
-grid_x=25;
+grid_x=14;
 grid_y=17.5;
+
+joy_x=70;
+joy_y=60;
+disp_x=50;
+disp_y=30;
 
 $fn=20;
 
@@ -104,6 +109,15 @@ module assembly(
             di=di
           );
         }
+        if (inset==OLED_JOY_RJ45) {
+          box_oled_joy_rj45(
+            x=x,
+            y=y,
+            z=(z-w)/2,
+            w=w,
+            di=di
+          );
+        }
         if (inset==TOUCH_DISPLAY) {
           box_touch_display(
             x=x,
@@ -117,6 +131,9 @@ module assembly(
       translate([w, -yh-y, w-z/2]) {
         if (inset==OLED_JOY) {
           inset_oled_joy(x=x,y=y,z=z-w,x0=x0,y0=y0);
+        }
+        if (inset==OLED_JOY_RJ45) {
+          inset_oled_joy_rj45(x=x,y=y,z=z-w,x0=x0,y0=y0);
         }
         if (inset==TOUCH_DISPLAY) {
           inset_touch_display(x=x,y=y,z=z-w,x0=x0,y0=y0);
@@ -403,7 +420,7 @@ module inset_grid(
   y0=y0
 ) {
   translate([x0+grid_x, grid_y, 0]) {
-    grove_module_holder(x=4,y=4);
+    grove_module_holder(x=5,y=4);
   }
 }
 
@@ -483,7 +500,6 @@ module inset_touch_display(
   }
 }
 
-
 module inset_oled_joy(
   x=x,
   y=y,
@@ -505,11 +521,11 @@ module inset_oled_joy(
             y0=y0
           );
         }
-        translate([x0+grid_x+50, grid_y+60, 0]) {
+        translate([x0+grid_x+joy_x, grid_y+joy_y, 0]) {
           joystick_cutout();
         }
       }
-      translate([x0+grid_x+50+10, grid_y+60, -w]) {
+      translate([x0+grid_x+joy_x+10, grid_y+joy_y, -w]) {
         rotate([180, 0, 0]) {
           rotate([0, 0, 180]) {
             joystick_setup();
@@ -517,15 +533,55 @@ module inset_oled_joy(
         }
       }
     }
-    translate([x0+grid_x, grid_y+60, 0]) {
+    translate([x0+grid_x+disp_x, grid_y+disp_y, 0]) {
       display_display(z=5);
     }
   }
-  translate([x0+grid_x, grid_y+60, 0]) {
+  translate([x0+grid_x+disp_x, grid_y+disp_y, 0]) {
     display_setup();
   }
   translate([x0, 0, 0]) {
     cube(size=[w, y-w, z/2-w]);
+  }
+}
+
+module inset_oled_joy_rj45(
+  x=x,
+  y=y,
+  z=z,
+  w=w,
+  x0=x0,
+  y0=y0
+) {
+  rj45_points=[
+  [0,60,0],
+  [0,40,0],
+  [0,20,0],
+  [0,0,0]
+  ];
+  difference() {
+    inset_oled_joy(
+      x=x,
+      y=y,
+      z=z,
+      w=w,
+      x0=x0,
+      y0=y0
+    );
+    translate([x0+grid_x-5, grid_y, 0]) {
+      for (i=rj45_points) {
+        translate(i) {
+          rj45();
+        }
+      }
+    }
+  }
+  translate([x0+grid_x, grid_y, 0]) {
+    for (i=rj45_points) {
+      translate(i) {
+        grove_rj45();
+      }
+    }
   }
 }
 
@@ -598,6 +654,33 @@ module box_touch_display(
   );
 }
 
+module box_oled_joy_rj45(
+  x=x,
+  x0=x0,
+  y=y,
+  y0=y0,
+  z=z/2,
+  w=w,
+  g=g,
+  di=w*2
+) {
+  difference() {
+    box_oled_joy(
+      x=x,
+      x0=x0,
+      y=y,
+      y0=y0,
+      z=z,
+      w=w,
+      g=g,
+      di=di
+    );
+    translate([0, y/2-w*2, 0]) {
+      cutout(y=y/2,z=z,w=w);
+    }
+  }
+}
+
 module box_oled_joy(
   x=x,
   x0=x0,
@@ -618,10 +701,10 @@ module box_oled_joy(
       di=di,
       latch=1
     );
-    translate([x0+grid_x+50+w, grid_y+60, 0]) {
+    translate([x0+grid_x+joy_x+w, grid_y+joy_y, 0]) {
       joystick_cutout();
     }
-    translate([x0+grid_x+w, grid_y+60, 0]) {
+    translate([x0+grid_x+disp_x+w, grid_y+disp_y, 0]) {
       display_display(z=5);
     }
   }
