@@ -1,18 +1,22 @@
 include <lib/grove.scad>
 include <conf/config.scad>
 
-x=55;
-y1=25;
+x=53;
+y1=22;
 y2=53;
-z1=20;
+z1=17;
 z2=32;
 
 /* assembly(); */
-box_bottom();
-translate([x*1.5, 0, 0]) {
-  rotate([0, 0, 180]) {
-    rotate([0, -90, 0]) {
-      box_top();
+print();
+
+module print() {
+  box_bottom();
+  translate([x*1.5, 0, 0]) {
+    rotate([0, 0, 180]) {
+      rotate([0, -90, 0]) {
+        box_top();
+      }
     }
   }
 }
@@ -20,7 +24,7 @@ translate([x*1.5, 0, 0]) {
 module assembly() {
   box_bottom();
   translate([-w, 0, -w]) {
-    box_top();
+    !box_top();
   }
 }
 
@@ -54,7 +58,7 @@ module box_top(
     }
     difference() {
       box(
-        x=x+w*2,
+        x=x+w,
         y1=y1+w*2,
         y2=y2+w*2,
         z1=z1+w*2,
@@ -63,6 +67,9 @@ module box_top(
       );
       translate([-5, 0, w]) {
         rj45();
+      }
+      translate([x+w*2, 0, z2/2+w]) {
+        cube(size=[w*4, y2+w*2, z2+w*2], center=true);
       }
       label();
     }
@@ -77,7 +84,7 @@ module box_bottom(
   z2=z2,
   w=w
 ) {
-  translate([10, 0, 0]) {
+  translate([10-w, 0, 0]) {
     grove_rj45();
   }
   difference() {
