@@ -1,8 +1,41 @@
 use <lib/MCAD/regular_shapes.scad>
 
-OLED_JOY="oled_joy";
-OLED_JOY_RJ45="oled_joy_rj45";
-TOUCH_DISPLAY="touch_display";
+module grove_clamp(x=5,h=2,d=2.2) {
+  clamp_end(x=x,h=h,d=d);
+  rotate(180) clamp_end(x=x,h=h,d=d);
+  clamp_arc(x=x,h=h);
+}
+
+module clamp_end(x=5,h=2,d=2.2) {
+  translate([-10, 0, 0]) {
+    difference() {
+      union() {
+        cylinder(d=x, h=h, $fn=12);
+        translate([0, -x/2, 0]) {
+          cube(size=[x*0.75, x, h]);
+        }
+      }
+      translate([0, 0, -1]) {
+        cylinder(d=d, h=h+2, $fn=12);
+      }
+    }
+  }
+}
+
+module clamp_arc(x=5,h=2) {
+  translate([0, 0, -11]) {
+    rotate([0, 60, 0]) {
+      rotate([-90, 0,0]) {
+        rotate_extrude(angle=60,$fn=64){
+          translate([-14.7, -x/2, 0]) {
+            square(size=[h,x]);
+          }
+        }
+      }
+    }
+  }
+}
+
 /* !grove_module_holder(x=2,y=1,flat=0,h=3); */
 module grove_module_holder(x=1,y=1,flat=0,h=3) {
   difference() {

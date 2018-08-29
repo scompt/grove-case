@@ -62,7 +62,7 @@ module mega_holder_screw(
 }
 
 module holder_screw(
-  w=w,
+  h=w,
   holes = [
     [13.8,2.5,0],
     [15,51,0],
