@@ -2,7 +2,7 @@ include <lib/nodemcu.scad>
 include <lib/case2.scad>
 
 board=NODEMCU;
-inset=OLED_JOY_RJ45;
+inset=RJ45;
 
 x0=35;
 y0=0;
@@ -13,6 +13,7 @@ z=50;
 a=180;
 
 grid_y=20;
+grid_x=12.5;
 
 joy_x=70;
 joy_y=40;
