@@ -635,8 +635,15 @@ module inset_nodemcu(
       translate([x0, 0, 0]) {
         cube(size=[34.5,35, 7]);
       }
-      translate([x0, 0, 0]) {
-        cube(size=[w, y-w, z/2-w]);
+      if (x0>0) {
+        translate([x0, y0, 0]) {
+          cube(size=[w, y-y0-w, z/2-w]);
+        }
+      }
+      if (y0>0) {
+        translate([x0, y0, 0]) {
+          cube(size=[x-x0-w, w, z/2-w]);
+        }
       }
     }
     translate([x0-w, 10, 5]) {
@@ -859,20 +866,27 @@ module inset_rj45(
 ) {
   difference() {
     union() {
-      translate([x0+grid_x, 0+grid_y, 0]) {
+      translate([x0+grid_x, grid_y, 0]) {
         inset_grid2(
           x=x-x0,
-          y=y,
+          y=y-y0,
           z=z,
           w=w
         );
       }
-      translate([x0, 0, 0]) {
-        cube(size=[w, y-w, z/2-w]);
+      if (x0>0) {
+        translate([x0, y0, 0]) {
+          cube(size=[w, y-y0-w, z/2-w]);
+        }
+      }
+      if (y0>0) {
+        translate([x0, y-w*2-y0, 0]) {
+          cube(size=[x-x0-w, w, z/2-w]);
+        }
       }
     }
-    translate([x0+grid_x-5, grid_y, 0]) {
-      for (i=[0:floor((y-grid_y)/20)]) {
+    translate([x0+grid_x-5, y0+grid_y, 0]) {
+      for (i=[0:floor((y-y0-grid_y)/20)]) {
         translate([0,i*20,0]) {
           resize([0,0,z]){
             rj45();
@@ -881,8 +895,8 @@ module inset_rj45(
       }
     }
   }
-  translate([x0, grid_y, 0]) {
-    for (i=[0:floor((y-grid_y)/20)]) {
+  translate([x0, y0+grid_y, 0]) {
+    for (i=[0:floor((y-y0-grid_y)/20)]) {
       translate([grid_x,i*20,0]) {
         grove_rj45();
       }
@@ -1180,9 +1194,17 @@ module box_rj45(
       di=di,
       latch=1
     );
-    translate([0, y/2-w*2, 0]) {
-      cutout(y=y/2,z=z,w=w);
-    }
+      if (y0>0) {
+        translate([0, y-y0-w*2, 0]) {
+        cutout(y=y0,z=z,w=w);
+      }
+      } else {
+        translate([0, y/2-w*2, 0]) {
+        cutout(y=y/2,z=z,w=w);
+      }
+      }
+  }
+}
 
 module box_rj45y(
   x=x,
