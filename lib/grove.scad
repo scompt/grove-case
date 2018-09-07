@@ -338,3 +338,29 @@ module ranger_holder(
     }
   }
 }
+/* !moisture_sensor(); */
+module moisture_sensor(h=3) {
+  /* grove_module_holder(); */
+  %grove_module(flat=1,pos=1,block=0);
+  translate([10, -10, 3]) {
+    difference() {
+      cube(size=[3, 20, 1.5]);
+      translate([3, 10, 0]) {
+        cylinder(r=3, h=10, center=true);
+      }
+    }
+    sensor_spoke();
+    translate([0, 13, 0]) {
+      sensor_spoke();
+    }
+  }
+}
+
+module sensor_spoke() {
+  hull() {
+    cube(size=[35, 7, 1.5]);
+    translate([0, 2, 0]) {
+      cube(size=[40, 3, 1.5]);
+    }
+  }
+}
