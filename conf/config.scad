@@ -7,3 +7,7 @@ MAT="MAT";
 SRC="grove-case";
 FILE="";
 VER="";
+
+//ACTIONs
+RENDER="render";
+PRINT="print";

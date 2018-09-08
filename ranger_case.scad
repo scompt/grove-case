@@ -7,19 +7,20 @@ y2=53;
 z1=17;
 z2=32;
 
-assembly();
-/* print(); */
+/* assembly(); */
+print();
 
-module part(cutout=0) {
+module part(cutout=NONE) {
   translate([x-8, 0, 12.5]) {
     rotate([0, 0, 90]) {
       rotate([90, 0, 0]) {
-        if (cutout) {
+        if (cutout==BOTTOM) {
           //part to cut as holes in the case
-          ranger_holder(h=5);
+          grove_ranger2();
         } else {
           //part to add to the case
-          grove_ranger2();
+          ranger_holder(h=5);
+          %grove_ranger2();
         }
       }
     }

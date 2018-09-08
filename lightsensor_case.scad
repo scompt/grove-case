@@ -30,41 +30,25 @@ module part(cutout=NONE) {
         grove_module_holder();
         %grove_module(flat=0,pos=0,block=0);
       }
-      difference() {
-        box(
-          x=x,
-          x1=x1,
-          y1=y1,
-          y2=y2,
-          z1=z1,
-          z2=z2,
-          w=w
-        );
-        translate([50-w-10, -10, z2/2+5+w]) {
-          cube(size=[x*2, y2*2,z2], center=true);
-        }
-        translate([-w*2, -y1/2, 0]) {
-          cube(size=[w*4, y1, z1]);
-        }
-      }
     }
   }
 }
 
 module cover_bottom() {
+  render()
   translate([-4-w, -y2/2-w, 0]) {
     difference() {
       cube(size=[15+w*2, y2+w*2, z2-5]);
       translate([w+5, -w, w]) {
         cube(size=[15+w*2, y2+w*4, z2-5]);
       }
-      translate([-w, w, 0]) {
+      translate([0, w, 0]) {
         cube(size=[5, y2, z2-5-w]);
       }
       hull() {
-        translate([8-w, y2/2-w+1, 0]) {
+        translate([8-w*2, y2/2-w+1, 0]) {
           cube(size=[5, 7, w]);
-          translate([0, -w*2, w]) {
+          translate([w, -w*2, w]) {
             cube(size=[5+w*2, 7+w*4, w]);
           }
         }
