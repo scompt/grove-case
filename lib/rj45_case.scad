@@ -89,8 +89,11 @@ module box_bottom(
       z2=z2,
       w=w
     );
-    translate([-w*2, -y2, 0]) {
+    translate([-w*2, -y2, 5]) {
       cube(size=[x+w*3-x1, y2*2, z2+w*2]);
+    }
+    translate([-w*2, -y1/2, 0]) {
+      cube(size=[w*4, y1, z1]);
     }
     label();
   }
