@@ -1,4 +1,5 @@
 include <lib/grove.scad>
+include <conf/config.scad>
 
 x=53;
 x1=7;
@@ -11,8 +12,15 @@ NONE=0;
 BOTTOM=1;
 TOP=2;
 
-/* assembly(); */
-/* print(); */
+//default action PRINT or RENDER
+ACTION=RENDER;
+
+if (ACTION==PRINT) {
+  print();
+} else {
+  assembly();
+}
+
 
 module label() {
   translate([0, -y1/2, -w+t]) {

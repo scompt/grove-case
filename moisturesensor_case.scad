@@ -8,8 +8,8 @@ y2=y1;
 z1=19;
 z2=z1;
 
-/* assembly(); */
-print();
+//default action PRINT or RENDER
+ACTION=RENDER;
 
 module part(cutout=NONE) {
   translate([50-w,0,0]){
