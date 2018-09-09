@@ -84,8 +84,13 @@ module box_bottom(
   z2=z2,
   w=w
 ) {
-  translate([10-w, 0, 0]) {
-    grove_rj45();
+  difference() {
+    translate([10-w, 0, 0]) {
+      grove_rj45();
+    }
+    translate([-8, -5, 0]) {
+      cube(size=[5, 10, 10]);
+    }
   }
   difference() {
     box_finish (

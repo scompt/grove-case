@@ -198,8 +198,8 @@ module grove_rj45() {
   %grove_module(x=2,pos=1,block=0);
   difference() {
     grove_module_holder(x=2);
-    translate([0, 0, 0]) {
-      cube(size=[30, 10, 10], center=true);
+    translate([10, 0, 0]) {
+      cube(size=[20, 10, 10], center=true);
     }
   }
 }

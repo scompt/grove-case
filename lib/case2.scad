@@ -688,6 +688,7 @@ module inset_nodemcuy(
   y0=y0
 ) {
   difference() {
+    //subdivisions
     union() {
       if (x0>0) {
         translate([x0, y0, 0]) {
@@ -700,6 +701,7 @@ module inset_nodemcuy(
         }
       }
     }
+    //rj45 cutouts
     translate([x0+grid_x, y0+grid_x-15, 0]) {
         rotate(90){
           rj45();
@@ -708,15 +710,21 @@ module inset_nodemcuy(
           }
         }
     }
-    translate([x-nodemcu_x-5+12.5, y0, 8.5]) {
+    //usb cutout for nodemcu
+    translate([x-nodemcu_x-5+15, y0, 8.5]) {
       cube(size=[10, w*3, z], center=false);
     }
   }
+  //grove holder for rj45 module
   translate([x0+grid_x, y0+grid_x, 0]) {
     rotate([0, 0, 90]) {
       grove_rj45();
+      translate([-15, -7.5, 3+g]) {
+        cube(size=[w, 15, z/2-w-3-g]);
+      }
     }
   }
+  //holder for nodemcu grove shield
   translate([x-nodemcu_x/2-5, y0+nodemcu_y/2+w+5, 0]) {
     /* rotate(-90) */
     nodemcu_shield_holder();
@@ -917,6 +925,7 @@ module inset_rj45y(
 ) {
   difference() {
     union() {
+      //subdivisions
       if (x0>0) {
         translate([x0, y0, 0]) {
           cube(size=[w, y-y0-w, z/2-w]);
@@ -927,6 +936,7 @@ module inset_rj45y(
           cube(size=[x-x0-w, w, z/2-w]);
         }
       }
+      //connector_holder block
       translate([x0+17, y0, 0]) {
         rotate([0, 0, 180]) {
           connector_holder(OUTER);
@@ -934,6 +944,7 @@ module inset_rj45y(
       }
     }
     translate([x0+35, y0, 0]) {
+      //rj45 cutouts
       grove_repeatx(
         x=x-x0-w-40,
         y=40,
@@ -950,12 +961,14 @@ module inset_rj45y(
         }
       }
     }
+    // connector holder cutouts
     translate([x0+17, y0+w, 0]) {
       rotate([0, 0, 180]) {
         connector_holder(INNER);
       }
     }
   }
+  //fill with rj45 modules
   translate([x0+35, y0, 0]) {
     grove_repeatx(
       x=x-x0-w-40,
@@ -966,8 +979,8 @@ module inset_rj45y(
       translate([0, y-y0-grid_y-w*2-30, 0]) {
         rotate(-90) {
           grove_rj45();
-          translate([-16+w+g/2, -9, 3+g]) {
-            cube(size=[w, 18, z/2-w-3-g]);
+          translate([-15, -7.5, 3+g]) {
+            cube(size=[w, 15, z/2-w-3-g]);
           }
         }
       }

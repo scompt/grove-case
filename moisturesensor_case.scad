@@ -27,6 +27,12 @@ module part(cutout=NONE) {
         grove_module_holder();
         %moisture_sensor();
       }
+      translate([10, -y2/2-w, w]) {
+        cube(size=[5, w, z2]);
+      }
+      translate([10, y2/2, w]) {
+        cube(size=[5, w, z2]);
+      }
     }
   }
 }
