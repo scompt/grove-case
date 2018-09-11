@@ -61,9 +61,6 @@ module box_top(
         z2=z2+w*2,
         w=w
       );
-      translate([-5, 0, w]) {
-        rj45();
-      }
       translate([x+w*2, 0, z2/2+w]) {
         cube(size=[w*4, y2+w*2, z2+w*2], center=true);
       }
@@ -85,14 +82,6 @@ module box_bottom(
   w=w
 ) {
   difference() {
-    translate([10-w, 0, 0]) {
-      grove_rj45();
-    }
-    translate([-8, -5, 0]) {
-      cube(size=[5, 10, 10]);
-    }
-  }
-  difference() {
     box_finish (
       x=x,
       x1=x1,
@@ -102,11 +91,11 @@ module box_bottom(
       z2=z2,
       w=w
     );
-    translate([-w*2, -y2, 5+w]) {
+    translate([-w*2-5, -y2, 5+w]) {
       cube(size=[x+w*3-x1, y2*2, z2+w*2]);
     }
     translate([-w*2, -y1/2, 0]) {
-      cube(size=[w*4, y1, z1]);
+      cube(size=[x+w*3, y1, z1+z2]);
     }
     label();
   }

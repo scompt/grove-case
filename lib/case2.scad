@@ -12,10 +12,6 @@ TOUCH_DISPLAY="touch_display";
 NODEMCU="NodeMCUx";
 NODEMCUY="NodeMCUy";
 
-ALL=0;
-INNER=1;
-OUTER=2;
-
 //width
 w=1.5;
 
@@ -728,34 +724,6 @@ module inset_nodemcuy(
   translate([x-nodemcu_x/2-5, y0+nodemcu_y/2+w+5, 0]) {
     /* rotate(-90) */
     nodemcu_shield_holder();
-  }
-}
-
-module connector_holder(part=ALL) {
-  difference() {
-    if (part==ALL || part==OUTER) {
-      translate([-17, -20, 0]) {
-        cube(size=[34.5,36, 7]);
-      }
-    }
-    if (part<OUTER) {
-      union() {
-        translate([-8.5, -20, 5]) {
-          rotate(90)
-          connector();
-          translate([-5, 0, 0]) {
-            cube(size=[10, 10, z/2]);
-          }
-        }
-        translate([8.5, -20, 5]) {
-          rotate(90)
-          connector();
-          translate([-5, 0, 0]) {
-            cube(size=[10, 10, z/2]);
-          }
-        }
-      }
-    }
   }
 }
 

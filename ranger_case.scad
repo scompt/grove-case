@@ -11,6 +11,20 @@ z2=32;
 ACTION=RENDER;
 
 module part(cutout=NONE) {
+  if (cutout==TOP) {
+    translate([-5, 0, 0]) {
+      rj45();
+    }
+  } else {
+    difference() {
+      translate([10-w, 0, 0]) {
+        grove_rj45();
+      }
+      translate([-8, -5, 0]) {
+        cube(size=[5, 10, 10]);
+      }
+    }
+  }
   translate([x-8, 0, 12.5]) {
     rotate([0, 0, 90]) {
       rotate([90, 0, 0]) {

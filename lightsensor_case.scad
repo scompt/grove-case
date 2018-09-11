@@ -21,11 +21,22 @@ module part(cutout=NONE) {
     }
     if (cutout==TOP) {
       //part to cut as holes in the top case
+      translate([-5, 0, 0]) {
+        rj45();
+      }
       translate([50-w+1+w, -y2, 5+w*2]) {
         cube(size=[20, y2*2, z2+w], center=false);
       }
     } else {
       //part to add to the case
+      difference() {
+        translate([10-w, 0, 0]) {
+          grove_rj45();
+        }
+        translate([-8, -5, 0]) {
+          cube(size=[5, 10, 10]);
+        }
+      }
       translate([50-w, 0, 0]) {
         grove_module_holder();
         %grove_module(flat=0,pos=0,block=0);

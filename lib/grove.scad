@@ -187,11 +187,16 @@ module joystick_cap(
 module relais() {
   translate([85, 20, 0]) {
     rotate(90) {
-      %grove_module(x=2,pos=0);
-      grove_module_holder(x=2);
+      grove_relay();
     }
   }
 }
+
+module grove_relay() {
+  %grove_module(x=2,pos=0);
+  grove_module_holder(x=2);
+}
+
 /* grove_rj45(); */
 module grove_rj45() {
   %rj45();
