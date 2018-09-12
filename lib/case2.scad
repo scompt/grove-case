@@ -283,18 +283,16 @@ module seal(
         );
       }
     }
-    box_mega(
+    boxx(
+      board=board,
       x=x,
-      x0=x0,
       y=y,
-      y0=y0,
-      z=z/2,
+      z=z,
       w=w,
-      g=g,
       di=di
     );
     translate([w, 0, w]) {
-      inset(board,x=x,y=y,z=z-w,x0=x0,y0=y0);
+      inset(board=board,x=x,y=y,z=z-w,x0=x0,y0=y0);
     }
   }
 }
