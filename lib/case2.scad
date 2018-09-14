@@ -265,16 +265,24 @@ module seal(
   z=z,
   w=w,
   g=g,
-  h=w*5
+  h=w*4.5
 ) {
   di=w*2;
   difference() {
-    translate([-w/2, -w/2, z/2-w*2]) {
+    translate([-w/2, -w/2, z/2-w*2.5]) {
       difference() {
         cube(size=[x+w, y+w, h]);
         translate([w*2, w*2, -w]) {
           cube(size=[x-w*3, y-w*3, h+w*2]);
         }
+        /* #difference() {
+          translate([w/2, w/2, w*2.5]) {
+            cube(size=[x, y, w*2]);
+          }
+          translate([w+w/2, w+w/2, w*3-1]) {
+            cube(size=[x-w*2, y-w*2, w*2+2]);
+          }
+        } */
         rounded_border(
           w=w,
           x=x,
@@ -291,7 +299,22 @@ module seal(
       w=w,
       di=di
     );
-    translate([w, 0, w]) {
+    /* translate([0, y, z]) {
+      rotate([180, 0, 0]) {
+        boxx(
+          inset=inset,
+          x=x,
+          y=y,
+          z=z,
+          w=w,
+          di=di
+        );
+        translate([w, 0, w*1.5]) {
+          inset(inset=inset,x=x,y=y,z=z-w,x0=x0,y0=y0);
+        }
+      }
+    } */
+    translate([w, 0, w*1.5]) {
       inset(board=board,x=x,y=y,z=z-w,x0=x0,y0=y0);
     }
   }
