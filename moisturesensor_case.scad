@@ -2,7 +2,7 @@ include <lib/rj45_case.scad>
 include <conf/config.scad>
 
 x=62;
-x1=0;
+x1=3;
 y1=25;
 y2=y1;
 z1=19;
