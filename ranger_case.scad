@@ -2,13 +2,15 @@ include <lib/rj45_case.scad>
 include <conf/config.scad>
 
 x=53;
+x1=10;
 y1=22;
 y2=53;
-z1=17;
+z1=18;
 z2=32;
 
 //default action PRINT or RENDER
-ACTION=RENDER;
+ACTION=PRINT;
+/* ACTION=RENDER; */
 
 module part(cutout=NONE) {
   if (cutout==TOP) {
@@ -20,7 +22,7 @@ module part(cutout=NONE) {
       translate([10-w, 0, 0]) {
         grove_rj45();
       }
-      translate([-8, -5, 0]) {
+      translate([-8+w, -5, -w]) {
         cube(size=[5, 10, 10]);
       }
     }
@@ -34,7 +36,10 @@ module part(cutout=NONE) {
         } else {
           //part to add to the case
           ranger_holder(h=5);
-          %grove_ranger2();
+          // ranger installation position
+          translate([0, 0, -6]) {
+            %grove_ranger2();
+          }
         }
       }
     }

@@ -53,8 +53,8 @@ module box_top(
     }
     difference() {
       box(
-        x=x+w,
-        x1=x1,
+        x=x+w*2,
+        x1=x1+w*1.5,
         y1=y1+w*2,
         y2=y2+w*2,
         z1=z1+w*2,
@@ -92,10 +92,13 @@ module box_bottom(
       w=w
     );
     translate([-w*2-5, -y2, 5+w]) {
-      cube(size=[x+w*3-x1, y2*2, z2+w*2]);
+      cube(size=[x+w*4-x1, y2*2, z2+w*2]);
     }
     translate([-w*2, -y1/2, 0]) {
-      cube(size=[x+w*3, y1, z1+z2]);
+      cube(size=[w*3, y1, z1+z2]);
+    }
+    translate([x-x1-w*1.5, -y2/2, 0]) {
+      cube(size=[x1+w*2.5, y2, z1+z2]);
     }
     label();
   }

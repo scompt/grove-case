@@ -10,6 +10,7 @@ z2=z1;
 
 //default action PRINT or RENDER
 ACTION=RENDER;
+/* ACTION=PRINT; */
 
 module part(cutout=NONE) {
   translate([0,0,0]){
