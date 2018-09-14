@@ -102,7 +102,10 @@ module box_bottom(
     }
     label();
   }
-  part();
+  difference() {
+    part();
+    part(cutout=BOTTOM);
+  }
 }
 
 module box_finish (

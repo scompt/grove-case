@@ -51,15 +51,17 @@ module grove_module_holder(x=1,y=1,h=3) {
   }
 }
 
-module grove_module_base_holder(h=3) {
-  $fn=16;
-  hole=1.8;
+module grove_module_base_holder(
+  h=3,
   points=[
   [-10,0,0],
   [0,-10,0],
   [10,0,0],
   [0,10,0]
-  ];
+  ],
+  hole=1.8
+) {
+  $fn=16;
 
   translate([0, 0, -h+3]) {
   for (i = points) {
@@ -290,7 +292,7 @@ module joystick_cutout(w=w) {
   }
 }
 /* grove_ranger2(); */
-module grove_ranger2() {
+module grove_ranger2(d=0) {
   ranger_holes=[
   [-7.5, -10, 0],
   [-7.5, 10, 0],
@@ -303,16 +305,16 @@ module grove_ranger2() {
       }
       for (i=ranger_holes) {
         translate(i) {
-          cylinder(r=1.5, h=10, center=true, $fn=12);
+          cylinder(d=1.5, h=10, center=true, $fn=12);
         }
       }
     }
 
     translate([3.5+7.5, 0, 0]) {
-      color("silver",0.6) cylinder(r=8, h=9, center=false);
+      color("silver",0.6) cylinder(d=16+d, h=14, center=false);
     }
     translate([-3.5-7.5, 0, 0]) {
-      color("silver",0.6) cylinder(r=8, h=9, center=false);
+      color("silver",0.6) cylinder(d=16+d, h=14, center=false);
     }
 
     translate([-5,9,3]) {
@@ -324,7 +326,7 @@ module grove_ranger2() {
 }
 
 module ranger_holder(
-  h=3
+  h=5
 ) {
   ranger_holes=[
   [-7.5, -10, 0],
@@ -332,16 +334,21 @@ module ranger_holder(
   [22.5, 0, 0]
   ];
   %grove_ranger2();
-  for (i=ranger_holes) {
+  rotate([180, 0, 0]) {
+    translate([0, 0, -h-3]) {
+      grove_module_base_holder(points=ranger_holes,h=h);
+    }
+  }
+  /* for (i=ranger_holes) {
     translate(i) {
       translate([0, 0, 4.5]) {
         difference() {
           cylinder(d=5, h=h, $fn=12);
-          cylinder(d=2.6, h=h, $fn=12);
+          cylinder(d=1.8, h=h, $fn=12);
         }
       }
     }
-  }
+  } */
 }
 /* !moisture_sensor(); */
 module moisture_sensor(h=3) {
