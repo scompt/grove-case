@@ -17,6 +17,7 @@ module part(cutout=NONE) {
     translate([-5, 0, 0]) {
       rj45();
     }
+  } else if (cutout==BOTTOM) {
   } else {
     difference() {
       translate([10-w, 0, 0]) {
@@ -33,9 +34,20 @@ module part(cutout=NONE) {
         if (cutout==BOTTOM) {
           //part to cut as holes in the case
           grove_ranger2(1);
+        } else if (cutout==TOP) {
         } else {
           //part to add to the case
-          ranger_holder(h=5);
+          difference() {
+            intersection() {
+              ranger_holder(h=5,cone=true);
+              translate([0, 0, 5]) {
+                cube(size=[x, z2, x1], center=true);
+              }
+            }
+            translate([-7.5, 25/2, 0]) {
+              cube(size=[20, 20, 17], center=true);
+            }
+          }
           // ranger installation position
           translate([0, 0, -13]) {
             %grove_ranger2();
@@ -47,6 +59,7 @@ module part(cutout=NONE) {
 }
 
 module print() {
+  /* render() */
   box_bottom();
   translate([x*1.5, 0, 0]) {
     rotate([0, 0, 180]) {

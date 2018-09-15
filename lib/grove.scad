@@ -59,7 +59,8 @@ module grove_module_base_holder(
   [10,0,0],
   [0,10,0]
   ],
-  hole=1.8
+  hole=1.8,
+  cone=false
 ) {
   $fn=16;
 
@@ -67,7 +68,11 @@ module grove_module_base_holder(
   for (i = points) {
     translate(i) {
       difference() {
-        cylinder(r=2.5, h=h);
+        if (cone) {
+          cylinder(r2=2.5,r1=6.5, h=h);
+        } else {
+          cylinder(r=2.5, h=h);
+        }
         translate([0, 0, h-2]) {
           cylinder(d=hole, h=h*2, center=true);
         }
@@ -326,7 +331,8 @@ module grove_ranger2(d=0) {
 }
 
 module ranger_holder(
-  h=5
+  h=5,
+  cone=false
 ) {
   ranger_holes=[
   [-7.5, -10, 0],
@@ -336,7 +342,7 @@ module ranger_holder(
   %grove_ranger2();
   rotate([180, 0, 0]) {
     translate([0, 0, -h-3]) {
-      grove_module_base_holder(points=ranger_holes,h=h);
+      grove_module_base_holder(points=ranger_holes,h=h,cone=cone);
     }
   }
   /* for (i=ranger_holes) {
