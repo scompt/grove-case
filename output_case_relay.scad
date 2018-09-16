@@ -17,7 +17,7 @@ module part(cutout=NONE) {
     if (cutout==BOTTOM) {
       //part to cut as holes in the bottom case
     }
-    if (cutout==TOP) {
+    else if (cutout==TOP) {
       //part to cut as holes in the top case
       translate([-5, -y1/2+12.5, 0]) {
         rj45();
