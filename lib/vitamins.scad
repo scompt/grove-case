@@ -53,3 +53,26 @@ module connector_holder(part=ALL,z=50) {
     }
   }
 }
+
+module connector_holder_single(part=ALL,z=50) {
+  difference() {
+    if (part==ALL || part==OUTER) {
+      translate([0, -20, 0]) {
+        cube(size=[17,36, 5+w]);
+      }
+    }
+    if (part<OUTER) {
+      union() {
+        translate([8.5, -20-f, 5]) {
+          rotate(90)
+          scale([1.02, 1.02, 1.02]) {
+            connector();
+          }
+          translate([-5, 0, 0]) {
+            cube(size=[10, 11, z/2]);
+          }
+        }
+      }
+    }
+  }
+}
