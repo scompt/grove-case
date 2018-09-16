@@ -728,8 +728,8 @@ module inset_nodemcuy(
         }
     }
     //usb cutout for nodemcu
-    translate([x-nodemcu_x-5+15, y0, 8.5]) {
-      cube(size=[10, w*3, z], center=false);
+    translate([x-nodemcu_x-5+15, y0, 16]) {
+      cube(size=[10, w*3, z/2], center=false);
     }
   }
   //grove holder for rj45 module
