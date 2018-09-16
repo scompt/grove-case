@@ -37,13 +37,13 @@ module clamp_arc(x=5,h=2) {
 }
 
 /* !grove_module_holder(x=2,y=1,flat=0,h=3); */
-module grove_module_holder(x=1,y=1,h=3) {
+module grove_module_holder(x=1,y=1,h=3,cone=false) {
   difference() {
     for (i=[0:x-1]) {
     for (j=[0:y-1]) {
       translate([20*i, 20*j, 0]) {
         rotate(90*i) {
-          grove_module_base_holder(h=h);
+          grove_module_base_holder(h=h,cone=cone);
         }
       }
     }
@@ -69,7 +69,7 @@ module grove_module_base_holder(
     translate(i) {
       difference() {
         if (cone) {
-          cylinder(r2=2.5,r1=6.5, h=h);
+          cylinder(r2=1.75,r1=5, h=h);
         } else {
           cylinder(r=2.5, h=h);
         }
@@ -205,11 +205,11 @@ module grove_relay() {
 }
 
 /* grove_rj45(); */
-module grove_rj45() {
+module grove_rj45(cone=false) {
   %rj45();
   %grove_module(x=2,pos=1,block=0);
   difference() {
-    grove_module_holder(x=2);
+    grove_module_holder(x=2,cone=cone);
     translate([10, 0, 0]) {
       cube(size=[20, 10, 10], center=true);
     }
@@ -340,8 +340,8 @@ module ranger_holder(
   [22.5, 0, 0]
   ];
   %grove_ranger2();
-  rotate([180, 0, 0]) {
-    translate([0, 0, -h-3]) {
+  rotate([0, 0, 0]) {
+    translate([0, 0, h+w]) {
       grove_module_base_holder(points=ranger_holes,h=h,cone=cone);
     }
   }

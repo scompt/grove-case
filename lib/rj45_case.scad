@@ -62,7 +62,7 @@ module box_top(
         w=w
       );
       translate([x+w*2, 0, z2/2+w]) {
-        cube(size=[w*4, y2+w*2, z2+w*2], center=true);
+        cube(size=[w*4+f, y2+w*2, z2+w*2], center=true);
       }
       label();
       translate([0, 0, w]) {
@@ -92,13 +92,21 @@ module box_bottom(
       w=w
     );
     translate([-w*2-5, -y2, 5+w]) {
-      cube(size=[x+w*4-x1, y2*2, z2+w*2]);
+      cube(size=[x+w*5-x1, y2*2, z2+w*2]);
     }
     translate([-w*2, -y1/2, 0]) {
       cube(size=[w*3, y1, z1+z2]);
     }
-    translate([x-x1-w*1.5, -y2/2, 0]) {
-      cube(size=[x1+w*2.5, y2, z1+z2]);
+    hull() {
+      translate([x-x1, -y2/2, 0]) {
+        cube(size=[x1+w, y2, z2]);
+      }
+      translate([x-x1, -y2/2, w+5]) {
+        cube(size=[x1, y2, z2-5+f]);
+      }
+    }
+    translate([x-x1-w, -y2/2, w+5]) {
+      cube(size=[x1+w, y2, z2-5]);
     }
     label();
   }
@@ -147,8 +155,8 @@ module box(
     translate([-w, 0, -w]) {
       block(
         x=x+w2,
-        x1=x1+w2,
-        y1=y1+w2,
+        x1=x1+w,
+        y1=y1+w,
         y2=y2+w2,
         z1=z1+w2,
         z2=z2+w2,

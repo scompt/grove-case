@@ -21,14 +21,14 @@ module part(cutout=NONE) {
   } else {
     difference() {
       translate([10-w, 0, 0]) {
-        grove_rj45();
+        grove_rj45(cone=true);
       }
       translate([-8+w, -5, -w]) {
         cube(size=[5, 10, 10]);
       }
     }
   }
-  translate([x-8, 0, 16]) {
+  translate([x-10, 0, 16]) {
     rotate([0, 0, 90]) {
       rotate([90, 0, 0]) {
         if (cutout==BOTTOM) {
@@ -39,17 +39,17 @@ module part(cutout=NONE) {
           //part to add to the case
           difference() {
             intersection() {
-              ranger_holder(h=5,cone=true);
+              ranger_holder(h=8,cone=false);
               translate([0, 0, 5]) {
                 cube(size=[x, z2, x1], center=true);
               }
             }
-            translate([-7.5, 25/2, 0]) {
+            *translate([-7.5, 25/2, 0]) {
               cube(size=[20, 20, 17], center=true);
             }
           }
           // ranger installation position
-          translate([0, 0, -13]) {
+          translate([0, 0, -8]) {
             %grove_ranger2();
           }
         }
@@ -60,8 +60,12 @@ module part(cutout=NONE) {
 
 module print() {
   /* render() */
-  box_bottom();
-  translate([x*1.5, 0, 0]) {
+  translate([0, 0, x+w]) {
+    rotate([0, 90, 0]) {
+      box_bottom();
+    }
+  }
+  translate([x*1, 0, 0]) {
     rotate([0, 0, 180]) {
       rotate([0, -90, 0]) {
         box_top();
