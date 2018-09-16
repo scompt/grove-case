@@ -60,15 +60,17 @@ module part(cutout=NONE) {
 
 module print() {
   /* render() */
-  translate([0, 0, x+w]) {
-    rotate([0, 90, 0]) {
-      box_bottom();
+  {
+    translate([0, 0, x+w]) {
+      rotate([0, 90, 0]) {
+        box_bottom();
+      }
     }
-  }
-  translate([x*1, 0, 0]) {
-    rotate([0, 0, 180]) {
-      rotate([0, -90, 0]) {
-        box_top();
+    translate([x*1, 0, 0]) {
+      rotate([0, 0, 180]) {
+        rotate([0, -90, 0]) {
+          box_top();
+        }
       }
     }
   }
