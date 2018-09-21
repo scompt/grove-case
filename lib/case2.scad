@@ -71,8 +71,8 @@ module assembly(
     difference() {
       boxx(board=board,x=x,y=y,z=z,di=di);
       if (x0>0) {
-        translate([w*2, yh+w*2, w-t])
-        rotate(90)
+        translate([x-t, yh+w*2, z/2-w*4])
+        rotate(90) rotate([90])
         {
           linear_extrude(t) {
             text(str(board,"/",inset,"/",MAT), size=th, font=font, valign="top");
@@ -120,9 +120,21 @@ module assembly(
   translate([w, yh, w]) {
     inset(board=board,x=x,y=y,z=z-w,x0=x0,y0=y0);
   }
-  hooks(x=x,y=y+yh,w=w);
+  if (hook_pos=="X") {
+    translate([0, y+yh, 0]) {
+      rotate([0, 0, -90]) {
+        hooks(x=y,y=x,w=w);
+      }
+    }
+  } else {
+    hooks(x=x,y=y+yh,w=w);
+  }
   translate([0, yh, 0]) {
-    %seal();
+    if (board==NODEMCU) {
+      %seal2();
+    } else {
+      %seal();
+    }
   }
 }
 
@@ -299,21 +311,51 @@ module seal(
       w=w,
       di=di
     );
-    /* translate([0, y, z]) {
-      rotate([180, 0, 0]) {
-        boxx(
-          inset=inset,
+    translate([w, 0, w*1.5]) {
+      inset(board=board,x=x,y=y,z=z-w,x0=x0,y0=y0);
+    }
+  }
+}
+
+module seal2(
+  x=x,
+  x0=x0,
+  y=y,
+  y0=y0,
+  z=z,
+  w=w,
+  g=g,
+  h=w*4.5
+) {
+  di=w*2;
+  difference() {
+    translate([-w/2, -w/2, z/2-w*2.5]) {
+      difference() {
+        translate([0, 0, 0]) {
+          cube(size=[x+w, y+w, h]);
+        }
+        translate([x0+w*3, w*2, -w]) {
+          cube(size=[x-x0-w*4, y-w*3, h+w*2]);
+        }
+        translate([-w, w*2, -w]) {
+          cube(size=[x0+w*2, y-w*3, h+w*2]);
+        }
+        rounded_border2(
+          w=w,
           x=x,
           y=y,
-          z=z,
-          w=w,
-          di=di
+          h=h
         );
-        translate([w, 0, w*1.5]) {
-          inset(inset=inset,x=x,y=y,z=z-w,x0=x0,y0=y0);
-        }
       }
-    } */
+    }
+    boxx(
+      board=board,
+      x=x,
+      y=y,
+      z=z,
+      w=w,
+      di=di
+    );
     translate([w, 0, w*1.5]) {
       inset(board=board,x=x,y=y,z=z-w,x0=x0,y0=y0);
     }
@@ -349,6 +391,40 @@ module rounded_border(
     rotate([0, -90, 0]) {
       rotate(270) {
         clip_border(w=w,l=x,d=w*2.5);
+      }
+    }
+  }
+}
+
+module rounded_border2(
+  w=w,
+  x=x,
+  y=y,
+  h=w*4
+) {
+  translate([x0+w*2, 0, h]) {
+    rotate([-90, 0, 0]) {
+      clip_border(w=w,l=y,d=w*2.5);
+    }
+  }
+  translate([-w*2, w, h]) {
+    rotate([0, 90, 0]) {
+      rotate(90) {
+        clip_border(w=w,l=x+w*2,d=w*2.5);
+      }
+    }
+  }
+  translate([x, y+w, h]) {
+    rotate([90, 0, 0]) {
+      rotate(180) {
+        clip_border(w=w,l=y,d=w*2.5);
+      }
+    }
+  }
+  translate([x+w, y, h]) {
+    rotate([0, -90, 0]) {
+      rotate(270) {
+        clip_border(w=w,l=x+w*2,d=w*2.5);
       }
     }
   }
@@ -641,17 +717,6 @@ module inset_nodemcu(
 ) {
   difference() {
     union() {
-      translate([x0+grid_x, 0+grid_y, 0]) {
-        inset_grid2(
-          x=x-x0-nodemcu_y,
-          y=y,
-          z=z,
-          w=w
-        );
-      }
-      translate([x0, 0, 0]) {
-        cube(size=[34.5,35, 7]);
-      }
       if (x0>0) {
         translate([x0, y0, 0]) {
           cube(size=[w, y-y0-w, z/2-w]);
@@ -662,39 +727,19 @@ module inset_nodemcu(
           cube(size=[x-x0-w, w, z/2-w]);
         }
       }
-    }
-    translate([x0-w, 10, 5]) {
-      connector();
-      translate([0, -5, 0]) {
-        cube(size=[10, 10, z/2]);
+      translate([x-nodemcu_y/2-w*2-5, nodemcu_x/2+w*5, 0]) {
+        rotate(-90){
+          nodemcu_shield_holder();
+        }
       }
     }
-    translate([x0-w, 27, 5]) {
-      connector();
-      translate([0, -5, 0]) {
-        cube(size=[10, 10, z/2]);
+    translate([x-nodemcu_y/2-w*2-10, nodemcu_x/2+w*5, 0]) {
+      rotate(-90){
+        nodemcu_usb();
       }
-    }
-    translate([x0, grid_y+40, 0]) {
-      resize([0,0,z]){
-        rj45();
-      }
-    }
-  }
-  translate([x-nodemcu_y/2-w*2-5, y0+nodemcu_x/2+w*2, 0]) {
-    rotate(-90)
-    nodemcu_shield_holder();
-  }
-  translate([x0+grid_x, grid_y+40, 0]) {
-    grove_rj45();
-  }
-  translate([x0, grid_y, 0]) {
-    translate([w+g/2, -9+2*20, 3+g]) {
-      cube(size=[w, 18, z/2-w-3-g]);
     }
   }
 }
-
 
 module inset_nodemcuy(
   x=x,
@@ -728,8 +773,8 @@ module inset_nodemcuy(
         }
     }
     //usb cutout for nodemcu
-    translate([x-nodemcu_x-5+15, y0, 16]) {
-      cube(size=[10, w*3, z/2], center=false);
+    translate([x-nodemcu_x/2-5, y0+nodemcu_y/2+w, 0]) {
+      nodemcu_usb();
     }
   }
   //grove holder for rj45 module
@@ -884,8 +929,20 @@ module inset_rj45(
     }
     translate([x0+grid_x-5, y0+grid_y, 0]) {
       for (i=[0:floor((y-y0-grid_y)/20)]) {
-        translate([0,i*20,0]) {
-          resize([0,0,z]){
+        translate([-w,i*20,0]) {
+          rj45();
+        }
+      }
+    }
+  }
+  translate([w, 0, 0]) {
+    intersection() {
+      translate([x0, y0, 0]) {
+        cube(size=[w, y-y0-w, z/2-w]);
+      }
+      translate([x0+grid_x-5, y0+grid_y, -g]) {
+        for (i=[0:floor((y-y0-grid_y)/20)]) {
+          translate([0,i*20,0]) {
             rj45();
           }
         }
@@ -896,9 +953,6 @@ module inset_rj45(
     for (i=[0:floor((y-y0-grid_y)/20)]) {
       translate([grid_x,i*20,0]) {
         grove_rj45();
-      }
-      translate([w+g/2, -9+i*20, 3+g]) {
-        cube(size=[w, 18, z/2-w-3-g]);
       }
     }
   }
@@ -1066,7 +1120,7 @@ module box_nodemcu(
     if (y0>0) {
       cutout(y=y0,z=z,w=w);
     } else {
-      cutout(y=y/2,z=z,w=w);
+      cutout(y=y-w*2,z=z,w=w);
     }
   }
 }
@@ -1196,15 +1250,13 @@ module box_rj45(
       di=di,
       latch=1
     );
-      if (y0>0) {
-        translate([0, y-y0-w*2, 0]) {
+    if (y0>0) {
+      translate([0, y-y0-w*2, 0]) {
         cutout(y=y0,z=z,w=w);
       }
-      } else {
-        translate([0, y/2-w*2, 0]) {
-        cutout(y=y/2,z=z,w=w);
-      }
-      }
+    } else {
+      cutout(y=y-w*2,z=z,w=w);
+    }
   }
 }
 
@@ -1228,15 +1280,15 @@ module box_rj45y(
       di=di,
       latch=1
     );
-      if (y0>0) {
-        translate([0, y-y0-w*2, 0]) {
+    if (y0>0) {
+      translate([0, y-y0-w*2, 0]) {
         cutout(y=y0,z=z,w=w);
       }
-      } else {
-        translate([0, y/2-w*2, 0]) {
+    } else {
+      translate([0, y/2-w*2, 0]) {
         cutout(y=y/2,z=z,w=w);
       }
-      }
+    }
   }
 }
 
