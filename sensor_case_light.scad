@@ -9,8 +9,8 @@ z1=19;
 z2=z1;
 
 //default action PRINT or RENDER
-ACTION=RENDER;
-/* ACTION=PRINT; */
+/* ACTION=RENDER; */
+ACTION=PRINT;
 
 module part(cutout=NONE) {
   translate([0,0,0]){
@@ -20,7 +20,7 @@ module part(cutout=NONE) {
       }
       //part to cut as holes in the bottom case
     }
-    if (cutout==TOP) {
+    else if (cutout==TOP) {
       //part to cut as holes in the top case
       translate([-5, 0, 0]) {
         rj45();
@@ -47,18 +47,23 @@ module part(cutout=NONE) {
 }
 
 module cover_bottom() {
-  render()
+  /* render() */
   translate([-4-w, -y2/2-w, 0]) {
     difference() {
       cube(size=[15+w*2, y2+w*2, z2-5]);
       translate([w+5, -w, w]) {
         cube(size=[15+w*2, y2+w*4, z2-5]);
       }
-      translate([0, w, 0]) {
-        cube(size=[5, y2, z2-5-w]);
+      translate([0, w, -f]) {
+        hull() {
+          cube(size=[5, y2, z2-5-w+f]);
+          translate([-w, 0, w]) {
+            cube(size=[5, y2, z2-5-w+f*2]);
+          }
+        }
       }
       hull() {
-        translate([8-w*2, y2/2-w+1, 0]) {
+        translate([8-w*2, y2/2-w+1, -f]) {
           cube(size=[5, 7, w]);
           translate([w, -w*2, w]) {
             cube(size=[5+w*2, 7+w*4, w]);
@@ -85,13 +90,16 @@ module assembly() {
 }
 
 module print() {
-  box_bottom();
-  translate([y2, y1*1.5, 0]) {
-    rotate([0, -90, 0]) {
-      box_top();
+  /* render() */
+  {
+    box_bottom();
+    translate([y2, y1*1.5, 0]) {
+      rotate([0, -90, 0]) {
+        box_top();
+      }
     }
-  }
-  translate([y2*2, y1*1.5, -3+w]) {
-    cover_bottom();
+    translate([y2*2, y1*1.5, -3+w]) {
+      cover_bottom();
+    }
   }
 }
