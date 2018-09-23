@@ -13,6 +13,9 @@ TOUCH_DISPLAY="touch_display";
 NODEMCU="NodeMCUx";
 NODEMCUY="NodeMCUy";
 
+PART=0;
+CUTOUT=1;
+
 //width
 w=1.5;
 
@@ -1291,6 +1294,47 @@ module box_rj45(
   }
 }
 
+module breakout_hole(
+  d=8,
+  w=w,
+  g=g, //gap
+  sq=0,
+  part=PART
+) {
+  if (part==PART) {
+    hull() {
+      cucy(d=d,h=w,sq=sq);
+      translate([0, 0, w]) {
+        cucy(d=d+w,h=w/2,sq=sq);
+      }
+    }
+    translate([0, 0, w]) {
+      cucy(d=d+w+g*1.5, h=w/2,sq=sq);
+    }
+  } else {
+    hull() {
+      cucy(d=d+g,h=w,sq=sq);
+      translate([0, 0, w]) {
+        cucy(d=d+w+g,h=w/2,sq=sq);
+      }
+    }
+    translate([0, 0, -w]) {
+      cucy(d=d+g, h=w*2, sq=sq);
+    }
+  }
+}
+
+module cucy(d,h,sq=0) {
+  if (sq==0) {
+    cylinder(d=d, h=h);
+  }
+  else {
+    translate([-d/2, -d/2, 0]) {
+      cube(size=[d, d, h]);
+    }
+  }
+}
+
 module box_rj45_ledbtn(
   x=x,
   x0=x0,
@@ -1301,11 +1345,13 @@ module box_rj45_ledbtn(
   g=g,
   di=w*2
 ) {
-  ledbtn_pos=[
-  [40,0,0],
-  [40,20,0],
-  /* [40,40,0], */
-  [40,50,0]
+  led_d=8;
+  btn_d=8;
+  led_pos=[
+    [40,50,0]
+  ];
+  btn_pos=[
+    [40,20,0]
   ];
   difference() {
     box_rj45(
@@ -1319,20 +1365,27 @@ module box_rj45_ledbtn(
       di=di
     );
     translate([x0+grid_x+w, grid_y, 0]) {
-      for (i=ledbtn_pos) {
+      for (i=led_pos) {
         translate(i) {
-          cylinder(d1=10,d2=10+w, h=w);
+          breakout_hole(d=led_d,part=CUTOUT);
+        }
+      }
+      for (i=btn_pos) {
+        translate(i) {
+          breakout_hole(d=btn_d,sq=1,part=CUTOUT);
         }
       }
     }
   }
   translate([x0+grid_x+w, grid_y, 0]) {
-    for (i=ledbtn_pos) {
+    for (i=led_pos) {
       translate(i) {
-        cylinder(d1=10-g/2,d2=10+w-g/2, h=w);
-        translate([0, 0, w+f]) {
-          cylinder(d=10+w, h=w/2);
-        }
+        breakout_hole(d=led_d,part=PART);
+      }
+    }
+    for (i=btn_pos) {
+      translate(i) {
+        breakout_hole(d=btn_d,sq=1,part=PART);
       }
     }
   }
