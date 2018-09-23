@@ -7,6 +7,7 @@ include <conf/config.scad>
 OLED_JOY="oled_joy";
 OLED_JOY_RJ45="oled_joy_rj45";
 RJ45="rj45";
+RJ45LEDBTN="rj45_ledbtn";
 RJ45Y="rj45y";
 TOUCH_DISPLAY="touch_display";
 NODEMCU="NodeMCUx";
@@ -25,7 +26,7 @@ y=y0+mega_y+y1+w*2;
 z=50;
 
 //gap
-g=0.75;
+g=0.45;
 
 a=0;
 
@@ -174,6 +175,15 @@ module boxx(
       di=di
     );
   }
+  else if (inset==RJ45LEDBTN) {
+    box_rj45_ledbtn(
+      x=x,
+      y=y,
+      z=(z-w)/2,
+      w=w,
+      di=di
+    );
+  }
   else if (inset==RJ45Y) {
     box_rj45y(
       x=x,
@@ -247,6 +257,9 @@ module inset(
   }
   else if (inset==RJ45) {
     inset_rj45(x=x,y=y,z=z-w,x0=x0,y0=y0);
+  }
+  else if (inset==RJ45LEDBTN) {
+    inset_rj45_ledbtn(x=x,y=y,z=z-w,x0=x0,y0=y0);
   }
   else if (inset==RJ45Y) {
     inset_rj45y(x=x,y=y,z=z-w,x0=x0,y0=y0);
@@ -719,21 +732,21 @@ module inset_nodemcu(
     union() {
       if (x0>0) {
         translate([x0, y0, 0]) {
-          cube(size=[w, y-y0-w, z/2-w]);
+          cube(size=[w, y-y0-w, (z-w)/2]);
         }
       }
       if (y0>0) {
         translate([x0, y0, 0]) {
-          cube(size=[x-x0-w, w, z/2-w]);
+          cube(size=[x-x0-w, w, (z-w)/2]);
         }
       }
-      translate([x-nodemcu_y/2-w*2-5, nodemcu_x/2+w*5, 0]) {
+      translate([x0+nodemcu_y/2+w*2+5, nodemcu_x/2+w*5, 0]) {
         rotate(-90){
           nodemcu_shield_holder();
         }
       }
     }
-    translate([x-nodemcu_y/2-w*2-10, nodemcu_x/2+w*5, 0]) {
+    translate([x0+nodemcu_y/2+w*2, nodemcu_x/2+w*5, 0]) {
       rotate(-90){
         nodemcu_usb();
       }
@@ -754,12 +767,12 @@ module inset_nodemcuy(
     union() {
       if (x0>0) {
         translate([x0, y0, 0]) {
-          cube(size=[w, y-y0-w, z/2-w]);
+          cube(size=[w, y-y0-w, (z-w)/2]);
         }
       }
       if (y0>0) {
         translate([x0, y0+w, 0]) {
-          cube(size=[x-x0-w, w, z/2-w]);
+          cube(size=[x-x0-w, w, (z-w)/2]);
         }
       }
     }
@@ -918,12 +931,12 @@ module inset_rj45(
       }
       if (x0>0) {
         translate([x0, y0, 0]) {
-          cube(size=[w, y-y0-w, z/2-w]);
+          cube(size=[w, y-y0-w, (z-w)/2]);
         }
       }
       if (y0>0) {
         translate([x0, y-w*2-y0, 0]) {
-          cube(size=[x-x0-w, w, z/2-w]);
+          cube(size=[x-x0-w, w, (z-w)/2]);
         }
       }
     }
@@ -958,6 +971,24 @@ module inset_rj45(
   }
 }
 
+module inset_rj45_ledbtn(
+  x=x,
+  y=y,
+  z=z,
+  w=w,
+  x0=x0,
+  y0=y0
+){
+    inset_rj45(
+      x=x,
+      y=y,
+      z=z,
+      w=w,
+      x0=x0,
+      y0=y0
+    );
+}
+
 module inset_rj45y(
   x=x,
   y=y,
@@ -971,12 +1002,12 @@ module inset_rj45y(
       //subdivisions
       if (x0>0) {
         translate([x0, y0, 0]) {
-          cube(size=[w, y-y0-w, z/2-w]);
+          cube(size=[w, y-y0-w, (z-w)/2]);
         }
       }
       if (y0>0) {
         translate([x0, y-w*2-y0, 0]) {
-          cube(size=[x-x0-w, w, z/2-w]);
+          cube(size=[x-x0-w, w, (z-w)/2]);
         }
       }
       //connector_holder block
@@ -1256,6 +1287,53 @@ module box_rj45(
       }
     } else {
       cutout(y=y-w*2,z=z,w=w);
+    }
+  }
+}
+
+module box_rj45_ledbtn(
+  x=x,
+  x0=x0,
+  y=y,
+  y0=y0,
+  z=z/2,
+  w=w,
+  g=g,
+  di=w*2
+) {
+  ledbtn_pos=[
+  [40,0,0],
+  [40,20,0],
+  /* [40,40,0], */
+  [40,50,0]
+  ];
+  difference() {
+    box_rj45(
+      x=x,
+      x0=x0,
+      y=y,
+      y0=y0,
+      z=z,
+      w=w,
+      g=g,
+      di=di
+    );
+    translate([x0+grid_x+w, grid_y, 0]) {
+      for (i=ledbtn_pos) {
+        translate(i) {
+          cylinder(d1=10,d2=10+w, h=w);
+        }
+      }
+    }
+  }
+  translate([x0+grid_x+w, grid_y, 0]) {
+    for (i=ledbtn_pos) {
+      translate(i) {
+        cylinder(d1=10-g/2,d2=10+w-g/2, h=w);
+        translate([0, 0, w+f]) {
+          cylinder(d=10+w, h=w/2);
+        }
+      }
     }
   }
 }

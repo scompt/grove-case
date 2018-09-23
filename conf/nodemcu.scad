@@ -2,13 +2,13 @@ include <lib/nodemcu.scad>
 include <lib/grove.scad>
 
 board=NODEMCU;
-inset=RJ45;
+inset=RJ45LEDBTN;
 
 hook_pos="X";
 
 x0=35;
 y0=0;
-x=x0+w*5+nodemcu_y+w*4;
+x=x0+w*5+nodemcu_y+w*4+12.5;
 y=y0+10+nodemcu_x+w*4;
 z=50;
 
