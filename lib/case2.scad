@@ -16,6 +16,9 @@ NODEMCUY="NodeMCUy";
 PART=0;
 CUTOUT=1;
 
+ALL="all";
+SEAL="seal";
+
 //width
 w=1.5;
 
@@ -32,6 +35,7 @@ z=50;
 g=0.45;
 
 a=0;
+al=a/2*0.08;
 
 board=MEGA;
 inset=TOUCH_DISPLAY;
@@ -56,9 +60,14 @@ module assembly(
   z=z,
   w=w,
   g=g,
-  a=a
+  a=a,
+  part=PART
 ) {
   yh=di/2+g+w*2;
+  t=w/2;
+  th=4;
+  font="Liberation Sans:style=Bold";
+  if (part==ALL || part==PART) {
   hinge(
     h=z/2,
     x=x,
@@ -68,9 +77,6 @@ module assembly(
     di=di,
     a=a
   );
-  t=w/2;
-  th=4;
-  font="Liberation Sans:style=Bold";
   translate([0, yh, 0]) {
     difference() {
       boxx(board=board,x=x,y=y,z=z,di=di);
@@ -98,10 +104,10 @@ module assembly(
       }
     }
     translate([x/10, yh+y, w*2+g]) {
-      latch(x=x/10,di=w*2,w=w,g=g,a=a/2);
+      latch(x=x/10,di=w*2,w=w,g=g,a=al);
     }
     translate([x*0.9, yh+y, w*2+g]) {
-      latch(x=x/10,di=w*2,w=w,g=g,a=a/2);
+      latch(x=x/10,di=w*2,w=w,g=g,a=al);
     }
    }
   translate([0,0,z/2]){
@@ -133,13 +139,23 @@ module assembly(
   } else {
     hooks(x=x,y=y+yh,w=w);
   }
+}
+if (part==ALL || part==SEAL) {
   translate([0, yh, 0]) {
     if (board==NODEMCU) {
-      %seal2();
+      difference() {
+        seal2();
+        translate([x0+nodemcu_y/2+w*2, nodemcu_x/2+w*5, 0]) {
+          rotate(-90){
+            nodemcu_usb(h=10);
+          }
+        }
+      }
     } else {
       %seal();
     }
   }
+}
 }
 
 module boxx(
@@ -347,18 +363,34 @@ module seal2(
   difference() {
     translate([-w/2, -w/2, z/2-w*2.5]) {
       difference() {
-        translate([0, 0, 0]) {
-          cube(size=[x+w, y+w, h]);
+        hull() {
+          translate([w/2, w/2, 0]) {
+            cube(size=[x, y, w]);
+          }
+          translate([0, 0, h-w*2]) {
+            cube(size=[x+w, y+w, w]);
+          }
         }
-        translate([x0+w*3, w*2, -w]) {
-          cube(size=[x-x0-w*4, y-w*3, h+w*2]);
+        hull() {
+          translate([x0+w*3-w/2, w*2-w/2, -w]) {
+            cube(size=[x-x0-w*3, y-w*2, w]);
+          }
+          translate([x0+w*3, w*2, h-w*2]) {
+            cube(size=[x-x0-w*4, y-w*3, w+f]);
+          }
         }
-        translate([-w, w*2, -w]) {
-          cube(size=[x0+w*2, y-w*3, h+w*2]);
+        hull() {
+          translate([-w, w*2-w/2, -w]) {
+            cube(size=[x0+w*2.5, y-w*2, w]);
+          }
+          translate([-w, w*2, h-w*2]) {
+            cube(size=[x0+w*2, y-w*3, w+f]);
+          }
         }
         rounded_border2(
           w=w,
           x=x,
+          x0=x0,
           y=y,
           h=h
         );
@@ -415,6 +447,7 @@ module rounded_border(
 module rounded_border2(
   w=w,
   x=x,
+  x0=x0,
   y=y,
   h=w*4
 ) {
@@ -475,7 +508,7 @@ module latch(
   di=w*2,
   w=w,
   g=g,
-  a=a/2
+  a=a/2*0.08
 ) {
   b=di+w+g;
   c=x+(w+g)*2;
@@ -502,44 +535,49 @@ module latch(
 
   // latch
   /* rotate([-a*0.95, 0, 0]) */
-  rotate([-a*0.08, 0, 0])
-  intersection() {
-    difference() {
-      union() {
+  difference() {
+    rotate([-a, 0, 0])
+    intersection() {
+      difference() {
+        union() {
+          rotate([0, 90, 0]) {
+            cylinder(d=do, h=x, center=true);
+          }
+          translate([-x/2, -do/2, 0]) {
+            cube(size=[x, do+w, z-w]);
+          }
+          translate([-x/2, -e+do/2, z-do/2+g]) {
+            cube(size=[x, e, do]);
+          }
+          latch_catch(
+            di=di,
+            x=x,
+            y=-e+do/2+w,
+            z=z-do/2+w-g/2
+          );
+        }
         rotate([0, 90, 0]) {
-          cylinder(d=do, h=x, center=true);
+          cylinder(d=di+g*2, h=c, center=true);
         }
-        translate([-x/2, -do/2, 0]) {
-          cube(size=[x, do+w, z-w]);
+        //rounding
+        translate([0, -do/2-w, z/2]) {
+          resize([x+g, do+di+w, z-do+di]) {
+            rotate([0, 90, 0]) {
+              cylinder(r=10, h=x+g, center=true, $fn=64);
+            }
+          }
         }
-        translate([-x/2, -e+do/2, z-do/2+g]) {
-          cube(size=[x, e, do]);
-        }
-        latch_catch(
-          di=di,
-          x=x,
-          y=-e+do/2+w,
-          z=z-do/2+w-g/2
-        );
       }
-      rotate([0, 90, 0]) {
-        cylinder(d=di+g*2, h=c, center=true);
-      }
-      //rounding
-      translate([0, -do/2-w, z/2]) {
-        resize([x+g, do+di+w, z-do+di]) {
+      translate([0, -do+w, z/2-do]) {
+        resize([x+g, do*3, z+do*2]) {
           rotate([0, 90, 0]) {
             cylinder(r=10, h=x+g, center=true, $fn=64);
           }
         }
       }
     }
-    translate([0, -do+w, z/2-do]) {
-      resize([x+g, do*3, z+do*2]) {
-        rotate([0, 90, 0]) {
-          cylinder(r=10, h=x+g, center=true, $fn=64);
-        }
-      }
+    translate([-25, 0, -do/2-50]) {
+      cube(size=[50, 50, 50]);
     }
   }
 }
@@ -945,20 +983,33 @@ module inset_rj45(
     }
     translate([x0+grid_x-5, y0+grid_y, 0]) {
       for (i=[0:floor((y-y0-grid_y)/20)]) {
-        translate([-w,i*20,0]) {
-          rj45();
+        translate([-grid_x+5+w,i*20,]) {
+          hull() {
+            resize([f,0,0])
+            rj45();
+            translate([-w, 0, w]) {
+              resize([f,0,0])
+              rj45();
+            }
+          }
         }
       }
     }
   }
   translate([w, 0, 0]) {
     intersection() {
-      translate([x0, y0, 0]) {
-        cube(size=[w, y-y0-w, z/2-w]);
+      translate([x0, y0, 4]) {
+        hull() {
+          cube(size=[f, y-y0-w, z/2-w]);
+          translate([w-f*2, 0, w]) {
+            cube(size=[f, y-y0-w, z/2-w]);
+          }
+        }
       }
       translate([x0+grid_x-5, y0+grid_y, -g]) {
         for (i=[0:floor((y-y0-grid_y)/20)]) {
           translate([0,i*20,0]) {
+            scale([1,1,1.025])
             rj45();
           }
         }
@@ -1308,7 +1359,7 @@ module breakout_hole(
         cucy(d=d+w,h=w/2,sq=sq);
       }
     }
-    translate([0, 0, w]) {
+    translate([0, 0, w+f]) {
       cucy(d=d+w+g*1.5, h=w/2,sq=sq);
     }
   } else {
