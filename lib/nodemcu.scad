@@ -47,8 +47,8 @@ module nodemcu_shield_holder(h=3) {
   }
 }
 
-module nodemcu_usb() {
+module nodemcu_usb(h=z/2) {
   translate([-25, -25, 14]) {
-    cube(size=[15, 10, z/2], center=false);
+    cube(size=[15, 10, h], center=false);
   }
 }

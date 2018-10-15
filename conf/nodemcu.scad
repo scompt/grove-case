@@ -13,6 +13,7 @@ y=y0+10+nodemcu_x+w*4;
 z=50;
 
 a=180;
+/* al=a/2*0.98; */
 
 grid_y=14;
 grid_x=15;
