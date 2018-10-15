@@ -1,5 +1,9 @@
 use <lib/MCAD/regular_shapes.scad>
 
+A=0;
+B=1;
+BOTH="both";
+
 module grove_clamp(x=5,h=2,d=2.2) {
   clamp_end(x=x,h=h,d=d);
   rotate(180) clamp_end(x=x,h=h,d=d);
@@ -40,13 +44,16 @@ module clamp_arc(x=5,h=2) {
 module grove_module_holder(x=1,y=1,h=3,cone=false) {
   difference() {
     for (i=[0:x-1]) {
-    for (j=[0:y-1]) {
-      translate([20*i, 20*j, 0]) {
-        rotate(90*i) {
-          grove_module_base_holder(h=h,cone=cone);
+      for (j=[0:y-1]) {
+        translate([20*i, 20*j, 0]) {
+          rotate(90*i) {
+            grove_module_base_holder(h=h,cone=cone);
+          }
         }
       }
     }
+    translate([x*10-10, y*10-10, 0]) {
+      cube(size=[10*x, 10*y, h*2], center=true);
     }
   }
 }
@@ -89,7 +96,7 @@ module grove_module(
           x=1,
           y=1,/* no effect yet */
           flat=0,
-          pos=1,
+          pos=A,
           block=1
 ) {
   translate([0, 0, 3]) {
@@ -103,11 +110,21 @@ module grove_module(
       }
     }
 
-    translate([(20*x-10)*pos-4-flat*x*20+flat*5, 10*y/2-5, flat*4]) {
-      rotate([0, 90*flat, 0]) {
-        color("white",0.6) grove_con();
+    if (pos==A || pos==BOTH) {
+      translate([flat*20*(x-1)+1, 10*y/2-5, flat*4]) {
+        rotate([0, 90*flat, 0]) {
+          color("white",0.6) grove_con();
+        }
       }
     }
+    if (pos==B || pos==BOTH) {
+      translate([(20*x-10)-4-flat*x*20+flat*5, 10*y/2-5, flat*4]) {
+        rotate([0, 90*flat, 0]) {
+          color("white",0.6) grove_con();
+        }
+      }
+    }
+
     if (block) {
       translate([10*x/2, 10*y/2-5, 2]) {
         color("green",0.3) cube(size=[10*x, 10*y, 10], center=true);
@@ -201,6 +218,19 @@ module relais() {
 
 module grove_relay() {
   %grove_module(x=2,pos=0);
+  grove_module_holder(x=2);
+}
+
+module grove_chainable_led() {
+  %grove_module(x=2,y=1,h=3,flat=1,block=0,pos=BOTH);
+  %translate([10, 0, 0]) {
+    rotate([180, 0, 0]) {
+      cylinder(d=8, h=5);
+      translate([0, 0, 5]) {
+        sphere(d=8);
+      }
+    }
+  }
   grove_module_holder(x=2);
 }
 
