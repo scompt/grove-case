@@ -246,9 +246,9 @@ module grove_rj45(cone=false) {
   }
 }
 /* rj45(); */
-module rj45() {
+module rj45(h=13.5) {
   translate([-10, -10+2.5, 4.5]) {
-    cube(size=[21, 15, 13.5]);
+    cube(size=[21, 15, h]);
   }
 }
 

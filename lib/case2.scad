@@ -787,7 +787,7 @@ module inset_nodemcu(
         }
       }
     }
-    translate([x0+nodemcu_y/2+w*2, nodemcu_x/2+w*5, 0]) {
+    translate([x0+nodemcu_y/2+w, nodemcu_x/2+w*5, 0]) {
       rotate(-90){
         nodemcu_usb();
       }
@@ -986,10 +986,10 @@ module inset_rj45(
         translate([-grid_x+5+w,i*20,]) {
           hull() {
             resize([f,0,0])
-            rj45();
+            rj45(h=z);
             translate([-w, 0, w]) {
               resize([f,0,0])
-              rj45();
+              rj45(h=z);
             }
           }
         }
@@ -1009,8 +1009,7 @@ module inset_rj45(
       translate([x0+grid_x-5, y0+grid_y, -g]) {
         for (i=[0:floor((y-y0-grid_y)/20)]) {
           translate([0,i*20,0]) {
-            scale([1,1,1.025])
-            rj45();
+            rj45(z/2-5.25);
           }
         }
       }

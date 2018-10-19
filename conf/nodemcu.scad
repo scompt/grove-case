@@ -16,7 +16,7 @@ a=180;
 /* al=a/2*0.98; */
 
 grid_y=14;
-grid_x=15;
+grid_x=13;
 
 joy_x=70;
 joy_y=40;
