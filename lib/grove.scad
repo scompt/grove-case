@@ -41,13 +41,13 @@ module clamp_arc(x=5,h=2) {
 }
 
 /* !grove_module_holder(x=2,y=1,flat=0,h=3); */
-module grove_module_holder(x=1,y=1,h=3,cone=false) {
+module grove_module_holder(x=1,y=1,h=3,cone=false,hole=1.8) {
   difference() {
     for (i=[0:x-1]) {
       for (j=[0:y-1]) {
         translate([20*i, 20*j, 0]) {
           rotate(90*i) {
-            grove_module_base_holder(h=h,cone=cone);
+            grove_module_base_holder(h=h,cone=cone,hole=hole);
           }
         }
       }
