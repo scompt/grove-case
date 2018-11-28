@@ -962,13 +962,19 @@ module inset_rj45(
 ) {
   difference() {
     union() {
-      translate([x0+grid_x, grid_y, 0]) {
-        inset_grid2(
-          x=x-x0,
-          y=y-y0,
-          z=z,
-          w=w
-        );
+      intersection() {
+        translate([x0, y0, -w]) {
+          cube(size=[x-x0-w,y-y0,z/2-w/2]);
+        }
+        translate([x0+grid_x, grid_y, 0]) {
+          inset_grid2(
+            x=x-x0,
+            y=y-y0,
+            z=z,
+            w=w
+          );
+        }
+        /* cube(size=[x0,y,z/w]); */
       }
       if (x0>0) {
         translate([x0, y0, 0]) {
@@ -986,10 +992,10 @@ module inset_rj45(
         translate([-grid_x+5+w,i*20,]) {
           hull() {
             resize([f,0,0])
-            rj45(h=z);
+            rj45();
             translate([-w, 0, w]) {
               resize([f,0,0])
-              rj45(h=z);
+              rj45();
             }
           }
         }
@@ -1009,16 +1015,21 @@ module inset_rj45(
       translate([x0+grid_x-5, y0+grid_y, -g]) {
         for (i=[0:floor((y-y0-grid_y)/20)]) {
           translate([0,i*20,0]) {
-            rj45(z/2-5.25);
+            rj45(h=14.2);
           }
         }
       }
     }
   }
-  translate([x0, y0+grid_y, 0]) {
-    for (i=[0:floor((y-y0-grid_y)/20)]) {
-      translate([grid_x,i*20,0]) {
-        grove_rj45();
+  intersection() {
+    translate([x0, y0, -w]) {
+      cube(size=[x-x0-w,y-y0,z/2-w/2]);
+    }
+    translate([x0, y0+grid_y, 0]) {
+      for (i=[0:floor((y-y0-grid_y)/20)]) {
+        translate([grid_x,i*20,0]) {
+          grove_rj45();
+        }
       }
     }
   }
