@@ -1,3 +1,4 @@
+include <MCAD/nuts_and_bolts.scad>
 include <lib/grove.scad>
 include <conf/config.scad>
 
@@ -113,6 +114,88 @@ module box_bottom(
   difference() {
     part();
     part(cutout=BOTTOM);
+  }
+}
+
+module box_holder() {
+  ya=min(y1,y2);
+  yb=max(y1,y2);
+  w2=5;
+  M=3;
+  a=atan((y1-y2)/(x-x1))/2;
+  b=-atan((z2-z1)/(x-x1));
+  holes=[
+    [x-w*3-20,10,0],
+    [x-w*3-20,-10,0],
+    [x-w*3,0,0]
+  ];
+  translate([-w*2, 0, -w*2-w2]) {
+    difference() {
+      block(
+        x=x+w*5,
+        x1=x1+w*3,
+        y1=y1+w*4,
+        y2=y2+w*5,
+        z1=w2,
+        z2=w2,
+        w=w
+      );
+      for (i=holes) {
+        translate(i) {
+          translate([0, 0, w2-METRIC_NUT_THICKNESS[M]+0.01]) {
+            nutHole(size=M);
+            rotate([180, 0, 0]) {
+              boltHole(size=M,length=w2*2,$fn=8);
+            }
+          }
+        }
+      }
+      translate([x+w*3, -w, w2-w+0.1]) {
+        rotate([0, 180, 0]) {
+          label();
+        }
+      }
+    }
+  }
+  translate([x+w*3.5, -y2/2-w*2.5, -w*2-w2]) {
+    cube(size=[w, y2+w*5, w*3+w2]);
+    translate([-w*2, -w, 0]) {
+      cube(size=[w*3, w, w*3+w2]);
+    }
+    translate([-w*2, y2+w*5, 0]) {
+      cube(size=[w*3, w, w*3+w2]);
+    }
+  }
+  translate([0, -(ya+(yb-ya)/2)/2-w*2.75, 0]) {
+    clamp(w2=w2,a=a,b=b);
+  }
+  translate([0, (ya+(yb-ya)/2)/2+w*2.75, 0]) {
+    clamp(w2=w2,a=180-a,b=-b);
+  }
+}
+
+module clamp(w2=w,a=0,b=0) {
+  za=min(z1,z2);
+  zb=max(z1,z2);
+  z=za+(zb-za)/2;
+  translate([(x-x1)/2, 0, 0]) {
+    rotate(a) {
+      translate([-w*2, -w/2, -w*2-w2]) {
+        cube(size=[w*4, w, z + w*6+w2]);
+        intersection() {
+          translate([0, 0, z+w*2+w2]) {
+            /* rotate([0,b,0]) */
+            cube(size=[w*4, w*4, w*6]);
+          }
+          translate([w*2, w*0.75, z+w*6+w2]) {
+            rotate([0,b,0])
+            rotate([35, 0, 0]) {
+              cube(size=[w*6, w*2.25, w*2],center=true);
+            }
+          }
+        }
+      }
+    }
   }
 }
 

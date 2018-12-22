@@ -73,6 +73,9 @@ module print() {
         }
       }
     }
+    translate([w*3, -y2*1.5, 5+w]) {
+      box_holder();
+    }
   }
 }
 
@@ -81,4 +84,5 @@ module assembly() {
   translate([-w, 0, -w]) {
     %box_top();
   }
+  box_holder();
 }

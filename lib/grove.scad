@@ -1,4 +1,4 @@
-use <lib/MCAD/regular_shapes.scad>
+include <MCAD/nuts_and_bolts.scad>
 
 A=0;
 B=1;
