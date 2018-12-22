@@ -111,14 +111,15 @@ module grove_module(
     }
 
     if (pos==A || pos==BOTH) {
-      translate([flat*20*(x-1)+1, 10*y/2-5, flat*4]) {
+      translate([flat*-5-7, 10*y/2-5, flat*4])
+      {
         rotate([0, 90*flat, 0]) {
           color("white",0.6) grove_con();
         }
       }
     }
     if (pos==B || pos==BOTH) {
-      translate([(20*x-10)-4-flat*x*20+flat*5, 10*y/2-5, flat*4]) {
+      translate([flat*-3+x*20-20+7, 10*y/2-5, flat*4]) {
         rotate([0, 90*flat, 0]) {
           color("white",0.6) grove_con();
         }
@@ -411,4 +412,9 @@ module sensor_spoke() {
       cube(size=[40, 3, 1.5]);
     }
   }
+}
+
+module water_sensor(h=3) {
+  /* grove_module_holder(); */
+  grove_module(x=2,flat=0,pos=A,block=0);
 }
