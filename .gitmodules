@@ -10,3 +10,6 @@
 [submodule "lib/openscad-slicer-makefile"]
 	path = lib/openscad-slicer-makefile
 	url = ../openscad-slicer-makefile.git
+[submodule "lib/threaded-library"]
+	path = lib/threaded-library
+	url = ../threaded-library.git

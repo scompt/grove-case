@@ -5,10 +5,16 @@ font="Liberation Sans:style=Bold";
 
 f=0.05;
 
+clip_holes=[
+  [-20,10,0],
+  [-20,-10,0],
+  [0,0,0]
+];
+
 MAT="MAT";
 SRC="grove-case";
 FILE="";
-VER="";
+VER="master";
 
 //ACTIONs
 RENDER="render";

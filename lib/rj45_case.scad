@@ -117,18 +117,28 @@ module box_bottom(
   }
 }
 
+module clip_holes(
+  M=3,
+  w2=5,
+) {
+  for (i=clip_holes) {
+    translate(i) {
+      translate([0, 0, w2-METRIC_NUT_THICKNESS[M]+0.01]) {
+        nutHole(size=M);
+        rotate([180, 0, 0]) {
+          boltHole(size=M,length=w2*2,$fn=8);
+        }
+      }
+    }
+  }
+}
+
 module box_holder() {
   ya=min(y1,y2);
   yb=max(y1,y2);
   w2=5;
-  M=3;
   a=atan((y1-y2)/(x-x1))/2;
   b=-atan((z2-z1)/(x-x1));
-  holes=[
-    [x-w*3-20,10,0],
-    [x-w*3-20,-10,0],
-    [x-w*3,0,0]
-  ];
   translate([-w*2, 0, -w*2-w2]) {
     difference() {
       block(
@@ -140,15 +150,8 @@ module box_holder() {
         z2=w2,
         w=w
       );
-      for (i=holes) {
-        translate(i) {
-          translate([0, 0, w2-METRIC_NUT_THICKNESS[M]+0.01]) {
-            nutHole(size=M);
-            rotate([180, 0, 0]) {
-              boltHole(size=M,length=w2*2,$fn=8);
-            }
-          }
-        }
+      translate([x-w*3, 0, 0]) {
+        clip_holes(w2=w2);
       }
       translate([x+w*3, -w, w2-w+0.1]) {
         rotate([0, 180, 0]) {

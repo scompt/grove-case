@@ -9,7 +9,7 @@ z1=19;
 z2=z1;
 
 //default action PRINT or RENDER
-ACTION=RENDER;
+ACTION=PRINT;
 
 module part(cutout=NONE) {
   f=0.5;
@@ -66,7 +66,7 @@ module print() {
         box_top();
       }
     }
-    translate([0, -y1*1.5, 0]) {
+    translate([0, -y1*1.5, 5+w]) {
       box_holder();
     }
   }
