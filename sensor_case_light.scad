@@ -14,11 +14,11 @@ ACTION=PRINT;
 
 module part(cutout=NONE) {
   translate([0,0,0]){
+    //part to cut as holes in the bottom case
     if (cutout==BOTTOM) {
       translate([50-w+1, -y2, 5+w]) {
         cube(size=[20, y2*2, z2+w], center=false);
       }
-      //part to cut as holes in the bottom case
     }
     else if (cutout==TOP) {
       //part to cut as holes in the top case
@@ -54,6 +54,11 @@ module cover_bottom() {
       translate([w+5, -w, w]) {
         cube(size=[15+w*2, y2+w*4, z2-5]);
       }
+      translate([x1+w*4, y2+w*3, z2-5+w]) {
+        rotate([0, 30, 180]) {
+          cube(size=[x1+w*5, y2+w*4, w*2]);
+        }
+      }
       translate([0, w, -f]) {
         hull() {
           cube(size=[5, y2, z2-5-w+f]);
@@ -87,6 +92,7 @@ module assembly() {
   translate([-w, 0, -w]) {
     %box_top();
   }
+  box_holder();
 }
 
 module print() {
@@ -100,6 +106,9 @@ module print() {
     }
     translate([y2*2, y1*1.5, -3+w]) {
       cover_bottom();
+    }
+    translate([0, -y1*1.5, 5+w]) {
+      box_holder();
     }
   }
 }

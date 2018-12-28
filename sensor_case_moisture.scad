@@ -55,13 +55,20 @@ module assembly() {
   translate([-w, 0, -w]) {
     %box_top();
   }
+  box_holder();
 }
 
 module print() {
-  box_bottom();
-  translate([y2, y1*1.5, 0]) {
-    rotate([0, -90, 0]) {
-      box_top();
+  /* render() */
+  {
+    box_bottom();
+    translate([y2, y1*1.5, 0]) {
+      rotate([0, -90, 0]) {
+        box_top();
+      }
+    }
+    translate([0, -y1*1.5, 5+w]) {
+      box_holder();
     }
   }
 }

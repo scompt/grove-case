@@ -9,8 +9,8 @@ z1=18;
 z2=33;
 
 //default action PRINT or RENDER
-ACTION=PRINT;
-/* ACTION=RENDER; */
+/* ACTION=PRINT; */
+ACTION=RENDER;
 
 module part(cutout=NONE) {
   if (cutout==TOP) {

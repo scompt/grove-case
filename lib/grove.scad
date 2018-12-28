@@ -390,7 +390,7 @@ module ranger_holder(
 /* !moisture_sensor(); */
 module moisture_sensor(h=3) {
   /* grove_module_holder(); */
-  %grove_module(flat=1,pos=1,block=0);
+  %grove_module(flat=1,pos=0,block=0);
   translate([10, -10, 3]) {
     difference() {
       cube(size=[3, 20, 1.5]);
