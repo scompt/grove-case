@@ -9,7 +9,7 @@ z1=19;
 z2=z1;
 
 //default action PRINT or RENDER
-ACTION=PRINT;
+ACTION=RENDER;
 
 module part(cutout=NONE) {
   f=0.5;

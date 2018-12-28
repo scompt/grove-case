@@ -106,6 +106,11 @@ module box_bottom(
         cube(size=[x1, y2, z2-5+f]);
       }
     }
+    translate([x-x1+w*2, y2/2+w*2, z2+w]) {
+      rotate([0, 30, 180]) {
+        cube(size=[x1+w, y2+w*4, w*2]);
+      }
+    }
     translate([x-x1-w, -y2/2, w+5]) {
       cube(size=[x1+w, y2, z2-5]);
     }
@@ -139,13 +144,13 @@ module box_holder() {
   w2=5;
   a=atan((y1-y2)/(x-x1))/2;
   b=-atan((z2-z1)/(x-x1));
-  translate([-w*2, 0, -w*2-w2]) {
+  translate([-w*2.5, 0, -w*2-w2]) {
     difference() {
       block(
-        x=x+w*5,
-        x1=x1+w*3,
-        y1=y1+w*4,
-        y2=y2+w*5,
+        x=x+w*4.5,
+        x1=x1+w*2,
+        y1=y1+w*3,
+        y2=y2+w*4,
         z1=w2,
         z2=w2,
         w=w
@@ -160,19 +165,32 @@ module box_holder() {
       }
     }
   }
-  translate([x+w*3.5, -y2/2-w*2.5, -w*2-w2]) {
-    cube(size=[w, y2+w*5, w*3+w2]);
-    translate([-w*2, -w, 0]) {
-      cube(size=[w*3, w, w*3+w2]);
-    }
-    translate([-w*2, y2+w*5, 0]) {
-      cube(size=[w*3, w, w*3+w2]);
+  translate([-w*3.5, -y1/2-w*1.5, -w*2-w2]) {
+    difference() {
+      cube(size=[w, y1+w*3, w2+w*2.5]);
+      translate([w/2, -w, w*2.5+w2]) {
+        rotate([0, 45, 0]) {
+          cube(size=[w*2, y1+w*5, w]);
+        }
+      }
     }
   }
-  translate([0, -(ya+(yb-ya)/2)/2-w*2.75, 0]) {
+  translate([x+w*3, -y2/2-w*2.5, -w*2-w2]) {
+    cube(size=[w, y2+w*5, w*3+w2]);
+    translate([-x1-w, 0, 0]) {
+      cube(size=[x1+w, y2+w*5, w2]);
+    }
+    translate([-x1-w, -w, 0]) {
+      cube(size=[x1+w*2, w, w*3+w2]);
+    }
+    translate([-x1-w, y2+w*5, 0]) {
+      cube(size=[x1+w*2, w, w*3+w2]);
+    }
+  }
+  translate([0, -(ya+(yb-ya)/2)/2-w*2.25, 0]) {
     clamp(w2=w2,a=a,b=b);
   }
-  translate([0, (ya+(yb-ya)/2)/2+w*2.75, 0]) {
+  translate([0, (ya+(yb-ya)/2)/2+w*2.25, 0]) {
     clamp(w2=w2,a=180-a,b=-b);
   }
 }
@@ -184,16 +202,21 @@ module clamp(w2=w,a=0,b=0) {
   translate([(x-x1)/2, 0, 0]) {
     rotate(a) {
       translate([-w*2, -w/2, -w*2-w2]) {
-        cube(size=[w*4, w, z + w*6+w2]);
+        hull() {
+          cube(size=[w*4, w, z + w*5+w2]);
+          translate([-w, 0, 0]) {
+            cube(size=[w*6, w, w]);
+          }
+        }
         intersection() {
           translate([0, 0, z+w*2+w2]) {
             /* rotate([0,b,0]) */
             cube(size=[w*4, w*4, w*6]);
           }
-          translate([w*2, w*0.75, z+w*6+w2]) {
+          translate([w*2, w*0.75, z+w*5+w2]) {
             rotate([0,b,0])
             rotate([35, 0, 0]) {
-              cube(size=[w*6, w*2.25, w*2],center=true);
+              cube(size=[w*5, w*2.25, w*2],center=true);
             }
           }
         }
