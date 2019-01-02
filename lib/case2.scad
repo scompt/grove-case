@@ -35,7 +35,6 @@ z=50;
 g=0.45;
 
 a=0;
-al=a/2*0.08;
 
 board=MEGA;
 inset=TOUCH_DISPLAY;
@@ -64,6 +63,7 @@ module assembly(
   part=PART
 ) {
   yh=di/2+g+w*2;
+  al=a/2*0.08;
   t=w/2;
   th=4;
   font="Liberation Sans:style=Bold";

@@ -18,4 +18,7 @@ VER="master";
 
 //ACTIONs
 RENDER="render";
+ASSY="assembly";
 PRINT="print";
+
+ACTION=RENDER;
