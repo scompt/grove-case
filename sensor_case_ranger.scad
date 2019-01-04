@@ -10,7 +10,7 @@ z2=33;
 
 //default action PRINT or RENDER
 /* ACTION=PRINT; */
-ACTION=RENDER;
+/* ACTION=ASSY; */
 
 module part(cutout=NONE) {
   if (cutout==TOP) {
@@ -82,7 +82,11 @@ module print() {
 module assembly() {
   box_bottom();
   translate([-w, 0, -w]) {
-    %box_top();
+    if (ACTION==RENDER) {
+      %box_top();
+    } else {
+      box_top();
+    }
   }
   box_holder();
 }

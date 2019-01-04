@@ -52,7 +52,11 @@ module part(cutout=NONE) {
 module assembly() {
   box_bottom();
   translate([-w, 0, -w]) {
-    %box_top();
+    if (ACTION==RENDER) {
+      %box_top();
+    } else {
+      box_top();
+    }
   }
   box_holder();
 }

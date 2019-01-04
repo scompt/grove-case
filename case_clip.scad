@@ -5,6 +5,7 @@ l=50;
 y=30;
 wc=5;
 d=20;
+s=1;
 
 ACTION=RENDER;
 FILE="case_clip.scad";
@@ -16,9 +17,25 @@ module assembly() {
     }
   }
   translate([x-50+5, 0, 0]) {
-    clip();
-    screw();
-    stamp();
+    clip(
+      l=l,
+      y=y,
+      w=wc,
+      d=d,
+      size=s
+    );
+    screw(
+      l=l,
+      y=y,
+      w=wc,
+      d=d
+    );
+    stamp(
+      l=l,
+      y=y,
+      w=wc,
+      d=d
+    );
   }
 }
 
@@ -31,15 +48,26 @@ module print() {
           l=l,
           y=y,
           w=wc,
-          d=d
+          d=d,
+          size=s
         );
       }
     }
     translate([-d, d, -d/2-wc/4]) {
-      screw();
+      screw(
+        l=l,
+        y=y,
+        w=wc,
+        d=d
+      );
     }
     translate([d, d, -d/2+wc/2]) {
-      stamp();
+      stamp(
+        l=l,
+        y=y,
+        w=wc,
+        d=d
+      );
     }
   }
 }
@@ -48,18 +76,36 @@ module clip(
   l=50,
   y=30,
   w=5,
-  d=20
+  d=20,
+  size=s
 ) {
-  difference() {
-    translate([0, -y/2, 0]) {
-      cube(size=[l, y, w]);
+  for (i=[0:size-1]) {
+    difference() {
+      translate([l*i, -y/2, 0]) {
+        cube(size=[l, y, w]);
+      }
+      translate([l*i+l-12.5, 0, 0]) {
+        clip_holes();
+      }
+      translate([-0.5, 1, w-1.45]) {
+        rotate([180, 0, 0]) {
+          label();
+        }
+      }
     }
-    translate([l-12.5, 0, 0]) {
-      clip_holes();
-    }
-    translate([-0.5, 1, w-1.45]) {
-      rotate([180, 0, 0]) {
-        label();
+    difference() {
+      translate([l*i, -y/2, d+w]) {
+        cube(size=[l, y, w]);
+      }
+      translate([l*i+l-22.5, 0, d]) {
+        trapezoidThreadNegativeSpace(
+          length=w*3,
+          pitch=w/2,
+          pitchRadius=7.5
+        );
+        translate([0, 0, d/2-w]) {
+          cylinder(r=7.5+w*0.75, h=w, center=true);
+        }
       }
     }
   }
@@ -71,21 +117,6 @@ module clip(
         translate([d/2, 0, 0]) {
           cube(size=[d, y*2, d+w*3], center=true);
         }
-      }
-    }
-  }
-  difference() {
-    translate([0, -y/2, d+w]) {
-      cube(size=[l, y, w]);
-    }
-    translate([l-22.5, 0, d]) {
-      trapezoidThreadNegativeSpace(
-        length=w*3,
-        pitch=w/2,
-        pitchRadius=7.5
-      );
-      translate([0, 0, d/2-w]) {
-        cylinder(r=7.5+w*0.75, h=w, center=true);
       }
     }
   }
