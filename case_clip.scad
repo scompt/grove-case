@@ -120,6 +120,25 @@ module clip(
       }
     }
   }
+  intersection() {
+    translate([d/2, 0, d/2+w]) {
+      rotate([90, 0, 0])
+      rotate_extrude(convexity=10) {
+        translate([d*1.25, 0, 0]) {
+          rotate(45) {
+            square(size=d, center=true);
+          }
+        }
+      }
+    }
+    hull() {
+      translate([0, 0, d/2+w]) {
+        rotate([90, 0, 0]) {
+          cylinder(r=d/2+w, h=y*2, center=true);
+        }
+      }
+    }
+  }
 }
 
 module screw(
